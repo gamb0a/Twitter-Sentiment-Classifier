@@ -3,15 +3,18 @@
 from __future__ import division
 import features
 import nltk # for pos tagging 
+import os
+
+script_dir = os.path.dirname(__file__)
 
 # load input file in a dictionnary
 def loadSentiSimple(filename):
     output={}
-    print "Opening SentiWordnet file..."
-    fi=open(filename,"r")
+    print ("Opening SentiWordnet file...")
+    fi=open(os.path.join(script_dir, filename),"r")
     line=fi.readline() # skip the first header line
     line=fi.readline()
-    print "Loading..."
+    print ("Loading...")
 
     while line:
         l=line.split('\t')
@@ -28,11 +31,11 @@ def loadSentiSimple(filename):
 
 def loadSentiFull(filename): # need fixing , use loadSentiSmall instead 
     output={}
-    print "Opening SentiWordnet file..."
-    fi=open(filename,"r")
+    print ("Opening SentiWordnet file...")
+    fi=open(os.path.join(script_dir, filename),"r")
     line=fi.readline() # skip the first header line
     line=fi.readline()
-    print "Loading..."
+    print ("Loading...")
 
     while line:
         l=line.split('\t')
@@ -57,11 +60,11 @@ def loadSentiFull(filename): # need fixing , use loadSentiSmall instead
 # combine words with their pos tags function
 def loadSentiWordnet(filename): # need fixing , use loadSentiFull instead 
     output={}
-    print "Opening SentiWordnet file..."
-    fi=open(filename,"r")
+    print ("Opening SentiWordnet file...")
+    fi=open(os.path.join(script_dir, filename),"r")
     line=fi.readline() # skip the first header line
     line=fi.readline()
-    print "Loading..."
+    print ("Loading...")
 
     while line:
         l=line.split('\t')
@@ -192,13 +195,13 @@ def posFreq(tweet,dict): # calculates the frequency of apperances of pos in a tw
     return result
 
 def loadAfinn(filename):
-    f=open(filename,'r')
+    f=open(os.path.join(script_dir, filename),'r')
     afinn={}
     line=f.readline()
     nbr=0
     while line:
         nbr+=1
-#        print "%d lines loaderd from afinn" % (nbr)
+#        print ("%d lines loaderd from afinn" % (nbr))
         l=line[:-1].split('\t')
         afinn[l[0]]=float(l[1])/4 # Normalizing 
         line=f.readline()

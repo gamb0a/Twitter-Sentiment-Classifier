@@ -2,6 +2,9 @@
 
 #import regex
 import re
+import os
+
+script_dir = os.path.dirname(__file__)
 
 #start process_tweet
 def processTweet(tweet,stopWords,slangs): # arg tweet, stopWords list and internet slangs dictionnary
@@ -42,13 +45,13 @@ def replaceTwoOrMore(s):
 #end
 
 #start getStopWordList
-def getStopWordList(stopWordListFileName):
+def getStopWordList(filename):
     #read the stopwords file and build a list
     stopWords = []
     stopWords.append('at_user')
     stopWords.append('url')
 
-    fp = open(stopWordListFileName, 'r')
+    fp = open(os.path.join(script_dir, filename), 'r')
     line = fp.readline()
     while line:
         word = line.strip()
@@ -68,7 +71,7 @@ def removeStopWords(tweet,stopWords):
     return result
 def loadSlangs(filename):
     slangs={}
-    fi=open(filename,'r')
+    fi=open(os.path.join(script_dir, filename),'r')
     line=fi.readline()
     while line:
         l=line.split(r',%,')

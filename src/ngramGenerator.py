@@ -2,6 +2,9 @@
 # K-most frequent words in a class od tweets
 import nltk
 import operator # for sorting dictionnares
+import os
+
+script_dir = os.path.dirname(__file__)
 
 # getting word frequencies from training data for a given class
 
@@ -19,7 +22,7 @@ def get_word_features(wordlist): # from a list of words returns a dictionnary wi
 
 def ngramText(filename): # generate vector of ngrams in text file
     textWords=[]
-    f=open(filename,"r")
+    f=open(os.path.join(script_dir, filename),"r", encoding="utf8", errors='ignore')
     line=f.readline()
     while line:
         textWords.extend(getTweetWords(line))

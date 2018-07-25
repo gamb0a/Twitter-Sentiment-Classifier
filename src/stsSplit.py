@@ -19,7 +19,7 @@ while line:
 f.close()
 fo.close()
 
-print "positive samples processed"
+print ("positive samples processed")
 
 f=open('../data/sts/negative_sample.csv','r')
 fo=open('../data/negative_processed.csv','w')
@@ -35,7 +35,7 @@ while line:
 f.close()
 fo.close()
 
-print "negative sample processed"
+print ("negative sample processed")
 
 f=open('../data/sts/neutral_sample.csv','r')
 fo=open('../data/neutral_processed.csv','w')
@@ -51,4 +51,4 @@ while line:
 f.close()
 fo.close()
 
-print "neutral sample processed"
+print ("neutral sample processed")

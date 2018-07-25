@@ -2,6 +2,9 @@
 # e.g : emoticons score, POS tags counts ...
 from __future__ import division
 import re
+import os
+
+script_dir = os.path.dirname(__file__)
 
 def scoreUnigram(tweet,posuni,neguni,neuuni):
     pos=0
@@ -26,7 +29,7 @@ def scoreUnigram(tweet,posuni,neguni,neuuni):
 def createEmoticonDictionary(filename):
     emo_scores = {'Positive': 0.5, 'Extremely-Positive': 1.0, 'Negative':-0.5,'Extremely-Negative': -1.0,'Neutral': 0.0}
     emo_score_list={}
-    fi = open(filename,"r")
+    fi = open(os.path.join(script_dir, filename),"r")
     l=fi.readline()
 
     while l:
