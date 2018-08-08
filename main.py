@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import preprocessing
 import polarity
@@ -95,30 +97,62 @@ y_train = np.array(Y)
 
 K_OPTIMA = 1
 MAX_ACC  = 0.0
-MAX_PRE  = 0.0
 for k in range(1, 15):
     knn = KNeighborsClassifier(n_neighbors=k)
     scores = cross_val_score(knn, X_train, y_train, cv=5, scoring='accuracy')
-    precisions = cross_val_score(knn, X_train, y_train, cv=5, scoring='accuracy')
     print ("K = " + str(k))
     print("Accuracy of the model using 5 fold cross validation : %0.4f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-    print("Precision of the model using 5 fold cross validation : %0.4f (+/- %0.2f)" % (precisions.mean(), precisions.std() * 2))
-    if (scores.mean() > MAX_ACC and precisions.mean() > MAX_PRE):
+    if (scores.mean() > MAX_ACC):
         MAX_ACC = scores.mean()
-        MAX_PRE = precisions.mean()
         K_OPTIMA = k
 
 print("\nK OPTIMA = " + str(K_OPTIMA))
-print("ACC OPTIMA = %0.4f" % MAX_PRE)
-print("PRE OPTIMA = %0.4f" % MAX_PRE)
+print("ACC OPTIMA = %0.4f" % MAX_ACC)
 
 # Creamos el modelo en base a los datos que obtuvimos
 clasificador = KNeighborsClassifier(K_OPTIMA)
 clasificador.fit(X,Y)
 
-predict = predecir("hello, how are you?", clasificador)
-pprint(predict)
-predict = predecir("Nice! that was awesome", clasificador)
-pprint(predict)
-predict = predecir("boo, i dont like it", clasificador)
-pprint(predict)
+from twitter import TwitterStream,OAuth
+
+import sys
+sys.path.append(".")
+import config
+
+search_term = "bitcoin"
+auth = OAuth(config.access_key,
+             config.access_secret,
+             config.consumer_key,
+             config.consumer_secret)
+stream = TwitterStream(auth = auth, secure = True)
+tweet_iter = stream.statuses.filter(track = search_term, languages=["en"])
+
+twt_count = 0
+twt_count_pos = 0
+twt_count_neg = 0
+twt_count_neu = 0
+for tweet in tweet_iter:
+    twt_count += 1
+    print("%s" % (tweet["text"]))
+    predict = predecir(tweet["text"], clasificador)
+    # 4 = positivo
+    # 2 = neutral
+    # 0 = negativo
+    print(predict[0])
+    if (predict[0] == 4.0):
+        print("✓")
+        twt_count_pos += 1
+    elif (predict[0] == 0.0):
+        print("X")
+        twt_count_neg += 1
+    else:
+        twt_count_neu += 1
+        print("~")
+    print("---------------------------")
+    if twt_count > 20:
+        break
+
+print ("Cantidad de Tweets ", twt_count)
+print ("Tweets Positivos ", twt_count_pos)
+print ("Tweets Negativos ", twt_count_neg)
+print ("Tweets Neutros ", twt_count_neu)
